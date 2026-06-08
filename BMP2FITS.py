@@ -69,7 +69,6 @@ def __try_convert__(file, op, args):
 
 def main():
     args = __get_args__()
-    print(args)
 
     ip = Path(args.input_path)
     op = Path(args.output_path)
@@ -83,7 +82,6 @@ def main():
             print("You passed a directory as your input so you must also pass an existing directory as your output.") #Existing because not including a file extension doesn't make a directory.
             return
         bmp_file_list = glob(f"{ip}/*.bmp")
-        print(bmp_file_list)
         for file in bmp_file_list:
             __try_convert__(file=file, op=op, args=args)
 
