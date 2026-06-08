@@ -2,23 +2,97 @@ from PIL import Image
 import numpy as np
 from astropy.io import fits
 from pathlib import Path
+import argparse
+from glob import glob
 
 
 
-def convert_bmp_fits(filepath: str, save_dir: str, header = None):
+def convert_bmp_fits(bmp_path, output_path, header = None, overwrite: bool = False):
     '''
     Converts a grayscale bitmap (.bmp) image to a FITS (.fits) file.
 
     Arguments:
-     filepath: The path to the bitmap image you want to convert.
-     save_dir: The path to the directory you want to save the created FITS image in.
+     bmp_path: The path to the bitmap image you want to convert.
+     output_path: The path to the file or directory you want to save the created FITS image in.
      headers (optional): astropy.io.fits.header.header() object to use as the header of the new FITS file.
     '''
-    with Image.open(filepath) as img:
-    
-        img_name = Path(filepath).stem
+    print(f"Attempting to convert {bmp_path}")
+    with Image.open(bmp_path) as img:
+        img_name = Path(bmp_path).stem
         img_array = np.array(img)
         img_mirror = np.flipud(img_array) #PIL loads upside down by default. Flipping gives original orientation.
-        fits.writeto(f"{save_dir}/{img_name}.fits", img_mirror, header=header, overwrite=True)
+        save_out_path = __get_save_out_path__(output_path=output_path, img_name=img_name)
+        if save_out_path:
+            fits.writeto(save_out_path, img_mirror, header=header, overwrite=overwrite)
+            print(f"Saved conversion of {bmp_path} as {save_out_path}")
+            return f"{output_path}/{img_name}.fits"
 
-    return f"{save_dir}/{img_name}.fits"
+def __get_save_out_path__(output_path, img_name):
+
+    output_path = Path(output_path)
+    if not output_path.exists():
+        output_path.touch()
+    if Path(output_path).is_file():
+        save_out_path = f"{output_path}"
+    elif Path(output_path).is_dir():
+        save_out_path = f"{output_path}/{img_name}.fits"
+
+    else:
+        print("Not a usable output_path.")
+    return save_out_path
+
+
+    
+    
+
+def __get_args__():
+    parser = argparse.ArgumentParser(
+    prog='BMP2FITS',
+    description='Converts .bmp files to .fits files'
+
+    )
+    parser.add_argument('input_path')
+    parser.add_argument('output_path')
+    parser.add_argument('-o', '--overwrite', action='store_true')
+    parser.add_argument('-y', action='store_true')
+
+
+    args = parser.parse_args()
+    return args
+
+def __try_convert__(file, op, args):
+    try: 
+        convert_bmp_fits(file, op, header=None, overwrite=args.overwrite)
+    except Exception as e:
+        print(e)
+    return
+
+def main():
+    args = __get_args__()
+    print(args)
+
+    ip = Path(args.input_path)
+    op = Path(args.output_path)
+    
+
+    if ip.is_file():
+        __try_convert__(ip, op, args=args)
+
+    elif ip.is_dir():
+        if not op.is_dir(): #Prevents writing over same file repeatedly. Unnecessary error if really only 1 file in directory to convert but in that case user should just pass file name.
+            print("You passed a directory as your input so you must also pass an existing directory as your output.") #Existing because not including a file extension doesn't make a directory.
+            return
+        bmp_file_list = glob(f"{ip}/*.bmp")
+        print(bmp_file_list)
+        for file in bmp_file_list:
+            __try_convert__(file=file, op=op, args=args)
+
+    else:
+        print("input_path was not valid.")
+
+    return
+        
+    
+
+if __name__ == "__main__":
+    main()
