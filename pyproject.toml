@@ -25,4 +25,5 @@ keywords = ["bmp", "fits", "converter", "image", "astronomy"]
 [project.urls]
 Repository = "https://github.com/Cbantz/BMP2FITS.git"
 [project.scripts]
-bmp2fits = "BMP2FITS.bmp2fits:main"
+bmp2fits = "bmp2fits.bmp2fits:main"
+
