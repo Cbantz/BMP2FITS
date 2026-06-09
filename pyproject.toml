@@ -8,22 +8,21 @@ name = "bmp2fits"
 description = "Converts grayscale bitmap (.bmp) files to flexible image transport system (.fits) files."
 version = "0.1.0"
 dependencies = [
-    astropy>=7.1.0
-    numpy>=2.4.6
-    Pillow>=12.2.0
+    "astropy>=7.1.0",
+    "numpy>=2.4.6",
+    "Pillow>=12.2.0",
 ]
 authors = [
-    {name = "Carson Bantz", email = "bantzcarson@gmail.com}
-
-]
+    {name = "Carson Bantz", email = "bantzcarson@gmail.com"},
+    ]
 maintainers = [
-    {name = "Carson Bantz", email = "bantzcarson@gmail.com"}
+    {name = "Carson Bantz", email = "bantzcarson@gmail.com"},
 ]
-readme = README.md
+readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["bmp", "fits", "converter", "image", "astronomy"]
 [project.urls]
 Repository = "https://github.com/Cbantz/BMP2FITS.git"
-[projects.scripts]
-bmp2fits = "BMP2FITS/bmp2fits:main"
+[project.scripts]
+bmp2fits = "BMP2FITS.bmp2fits:main"

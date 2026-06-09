@@ -2,3 +2,6 @@ __pycache__*
 *.bmp
 *.ipynb
 *.fits
+*.egg-info/
+dist/
+build/
