@@ -46,6 +46,8 @@ This function, much like the CLI, takes arguments for bmp_path, output_path, ove
 
 `bmp2fits.convert("path/to/bmp.bmp", "my_converted_files", header=my_header, overwrite = True)`
 
+Convert() returns the path to the saved FITS file.
+
 Unlike the CLI, the python package is not designed for converting an entire directory. Rather, it converts individual files, passed via the bmp_path argument, and saves them to the output_path, which has the same rules as the CLI. If you wish to convert full directories in python, this is easily accomplished using [glob](https://docs.python.org/3/library/glob.html).
 
 Working in python gives you the option to add headers to your converted FITS file by passing an [astropy.io.fits.Header](https://docs.astropy.org/en/latest/io/fits/api/headers.html#astropy.io.fits.Header) object.
