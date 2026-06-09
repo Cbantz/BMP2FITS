@@ -42,7 +42,9 @@ Bmp2fits can be imported into your project using
 
 The only function you are likely to use is bmp2fits.convert().
 
-This function, much like the CLI, takes arguments for bmp_path, output_path, overwrite, and verbose.
+This function, much like the CLI, takes arguments for bmp_path, output_path, overwrite, and verbose. For example,
+
+`bmp2fits.convert("path/to/bmp.bmp", "my_converted_files", header=my_header, overwrite = True)`
 
 Unlike the CLI, the python package is not designed for converting an entire directory. Rather, it converts individual files, passed via the bmp_path argument, and saves them to the output_path, which has the same rules as the CLI. If you wish to convert full directories in python, this is easily accomplished using [glob](https://docs.python.org/3/library/glob.html).
 
