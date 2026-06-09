@@ -7,7 +7,7 @@ from glob import glob
 
 
 
-def convert(bmp_path, output_path, header = None, overwrite: bool = False):
+def convert(bmp_path, output_path, header = None, overwrite: bool = False, verbose : bool = False):
     '''
     Converts a grayscale bitmap (.bmp) image to a FITS (.fits) file.
 
@@ -16,7 +16,8 @@ def convert(bmp_path, output_path, header = None, overwrite: bool = False):
      output_path: The path to the file or directory you want to save the created FITS image in.
      headers (optional): astropy.io.fits.header.header() object to use as the header of the new FITS file.
     '''
-    print(f"Attempting to convert {bmp_path}")
+    if verbose:
+        print(f"Attempting to convert {bmp_path}")
     with Image.open(bmp_path) as img:
         img_name = Path(bmp_path).stem
         img_array = np.array(img)
@@ -24,7 +25,8 @@ def convert(bmp_path, output_path, header = None, overwrite: bool = False):
         save_out_path = __get_save_out_path__(output_path=output_path, img_name=img_name)
         if save_out_path:
             fits.writeto(save_out_path, img_mirror, header=header, overwrite=overwrite)
-            print(f"Saved conversion of {bmp_path} as {save_out_path}")
+            if verbose:
+                print(f"Saved conversion of {bmp_path} as {save_out_path}")
             return f"{output_path}/{img_name}.fits"
 
 def __get_save_out_path__(output_path, img_name):
@@ -55,6 +57,7 @@ def __get_args__():
     parser.add_argument('output_path')
     parser.add_argument('-o', '--overwrite', action='store_true')
     parser.add_argument('-y', action='store_true')
+    parser.add_argument('-v', '--verbose', action='store_true')
 
 
     args = parser.parse_args()
@@ -62,7 +65,7 @@ def __get_args__():
 
 def __try_convert__(file, op, args):
     try: 
-        convert_bmp_fits(file, op, header=None, overwrite=args.overwrite)
+        convert(file, op, header=None, overwrite=args.overwrite, verbose=args.verbose)
     except Exception as e:
         print(e)
     return
