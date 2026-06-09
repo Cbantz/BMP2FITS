@@ -7,7 +7,7 @@ from glob import glob
 
 
 
-def convert_bmp_fits(bmp_path, output_path, header = None, overwrite: bool = False):
+def convert(bmp_path, output_path, header = None, overwrite: bool = False):
     '''
     Converts a grayscale bitmap (.bmp) image to a FITS (.fits) file.
 
